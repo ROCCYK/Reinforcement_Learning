@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html><head></head><body style="color: rgb(32, 33, 34); font-family: undefined;"><p data-end="418" data-start="68">Model-free reinforcement learning is a class of RL algorithms that learn directly from the environment without building a model of the environment's dynamics. In simple terms, model-free RL does not attempt to understand or predict how the environment works but instead learns how to act optimally based on the <strong data-end="390" data-start="379">rewards</strong> received from interactions.</p>
+<hr data-end="423" data-start="420">
+<h4 data-end="463" data-start="425"><strong data-end="463" data-start="433">What Does Model-Free Mean?</strong></h4>
+<p data-end="484" data-start="464">Model-free RL means:</p>
+<ol data-end="860" data-start="485">
+<li data-end="604" data-start="485"><strong data-end="524" data-start="488">No Model of Transition Dynamics:</strong> The agent does not know or learn the transition probabilities (<math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><msup><mi>s</mi><mo rspace="0em" lspace="0em" mathvariant="normal">′</mo></msup><mi mathvariant="normal">∣</mi><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex" data-d2l-attr-encoding="application/x-tex">P(s'|s, a)</annotation></semantics></math><span aria-hidden="true">P(s′∣s,a)</span>).</li>
+<li data-end="718" data-start="605"><strong data-end="637" data-start="608">Learning from Experience:</strong> The agent directly learns from the outcomes of actions and updates its strategy.</li>
+<li data-end="860" data-start="719"><strong data-end="761" data-start="722">Focus on Value and Policy Learning:</strong> The methods either learn the <strong data-end="810" data-start="791">value functions</strong> (like Q-values) or directly learn the <strong data-end="859" data-start="849">policy</strong>.</li>
+</ol>
+<hr data-end="865" data-start="862">
+<h3 data-end="908" data-start="867"><strong data-end="908" data-start="874">Core Concepts of Model-Free RL</strong></h3>
+<p data-end="967" data-start="910">Model-free RL methods can be divided into two main types:</p>
+<h4 data-end="1000" data-start="969"><strong data-end="1000" data-start="974">1. Value-Based Methods</strong></h4>
+<p data-end="1131" data-start="1001">These methods focus on learning the optimal <strong data-end="1063" data-start="1045">value function</strong> that estimates the expected cumulative reward from any given state.</p>
+<p data-end="1146" data-start="1133"><strong data-end="1146" data-start="1133">Examples:</strong></p>
+<ul data-end="1488" data-start="1147">
+<li data-end="1293" data-start="1147"><strong data-end="1164" data-start="1149">Q-Learning:</strong> Learns the optimal action-value function <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex" data-d2l-attr-encoding="application/x-tex">Q(s, a)</annotation></semantics></math><span aria-hidden="true">Q(s,a)</span> by iteratively updating Q-values using the <strong data-end="1292" data-start="1261">Bellman Optimality Equation</strong>.</li>
+<li data-end="1379" data-start="1294"><strong data-end="1306" data-start="1296">SARSA:</strong> Learns the value of the <strong data-end="1347" data-start="1331">action taken</strong> rather than the optimal action.</li>
+<li data-end="1488" data-start="1380"><strong data-end="1408" data-start="1382">Deep Q-Networks (DQN):</strong> Uses neural networks to approximate Q-values for high-dimensional state spaces.</li>
+</ul>
+<p data-end="1522" data-start="1490"><strong data-end="1522" data-start="1490">Pros of Value-Based Methods:</strong></p>
+<ul data-end="1656" data-start="1523">
+<li data-end="1589" data-start="1523">Simple and easy to implement for small or discrete state spaces.</li>
+<li data-end="1656" data-start="1590">Convergence guarantees for Q-learning under specific conditions.</li>
+</ul>
+<p data-end="1667" data-start="1658"><strong data-end="1667" data-start="1658">Cons:</strong></p>
+<ul data-end="1792" data-start="1668">
+<li data-end="1722" data-start="1668">Not efficient for large or continuous action spaces.</li>
+<li data-end="1792" data-start="1723">Struggles with stability when combined with function approximation.</li>
+</ul>
+<hr data-end="1797" data-start="1794">
+<h4 data-end="1831" data-start="1799"><strong data-end="1831" data-start="1804">2. Policy-Based Methods</strong></h4>
+<p data-end="1922" data-start="1832">These methods directly learn the <strong data-end="1883" data-start="1865">optimal policy</strong> without estimating the value function.</p>
+<p data-end="1937" data-start="1924"><strong data-end="1937" data-start="1924">Examples:</strong></p>
+<ul data-end="2235" data-start="1938">
+<li data-end="2052" data-start="1938"><strong data-end="1972" data-start="1940">Policy Gradient (REINFORCE):</strong> Directly optimizes the policy by computing the gradient of the expected reward.</li>
+<li data-end="2235" data-start="2053"><strong data-end="2080" data-start="2055">Actor-Critic Methods:</strong> Combines the advantages of both value-based and policy-based methods. The <strong data-end="2164" data-start="2155">Actor</strong> updates the policy, while the <strong data-end="2205" data-start="2195">Critic</strong> evaluates the value function.</li>
+</ul>
+<p data-end="2270" data-start="2237"><strong data-end="2270" data-start="2237">Pros of Policy-Based Methods:</strong></p>
+<ul data-end="2377" data-start="2271">
+<li data-end="2332" data-start="2271">Effective for continuous or high-dimensional action spaces.</li>
+<li data-end="2377" data-start="2333">Can directly optimize stochastic policies.</li>
+</ul>
+<p data-end="2388" data-start="2379"><strong data-end="2388" data-start="2379">Cons:</strong></p>
+<ul data-end="2459" data-start="2389">
+<li data-end="2427" data-start="2389">High variance in gradient estimates.</li>
+<li data-end="2459" data-start="2428">May converge to local optima.</li>
+</ul>
+<hr data-end="2464" data-start="2461">
+<h3 data-end="2504" data-start="2466">⚙️ <strong data-end="2504" data-start="2473">Why Use Model-Free Methods?</strong></h3>
+<p data-end="2539" data-start="2505">Model-free methods are ideal when:</p>
+<ol data-end="2816" data-start="2540">
+<li data-end="2598" data-start="2540"><strong data-end="2577" data-start="2543">The environment is too complex</strong> to model accurately.</li>
+<li data-end="2647" data-start="2599"><strong data-end="2634" data-start="2602">Learning through interaction</strong> is feasible.</li>
+<li data-end="2730" data-start="2648"><strong data-end="2686" data-start="2651">Immediate and long-term rewards</strong> are intertwined, making planning difficult.</li>
+<li data-end="2816" data-start="2731"><strong data-end="2748" data-start="2734">Efficiency</strong> is less critical, and more focus is on adaptability and robustness.</li>
+</ol>
+<hr data-end="2821" data-start="2818">
+<h3 data-end="2874" data-start="2823"><strong data-end="2874" data-start="2830">Real-World Applications of Model-Free RL</strong></h3>
+<ol data-end="3218" data-start="2875">
+<li data-end="2948" data-start="2875"><strong data-end="2895" data-start="2878">Game Playing:</strong> DQN achieved human-level performance on Atari games.</li>
+<li data-end="3035" data-start="2949"><strong data-end="2965" data-start="2952">Robotics:</strong> Learning movement and manipulation without knowing physical dynamics.</li>
+<li data-end="3129" data-start="3036"><strong data-end="3063" data-start="3039">Autonomous Vehicles:</strong> Adaptive decision-making without fully modeling traffic dynamics.</li>
+<li data-end="3218" data-start="3130"><strong data-end="3157" data-start="3133">Finance and Trading:</strong> Learning trading strategies purely from market interactions.</li>
+</ol>
+<hr data-end="3223" data-start="3220">
+<h3 data-end="3274" data-start="3225"><strong data-end="3274" data-start="3232">Comparison of Model-Free RL Algorithms</strong></h3>
+<div>
+<table node="[object Object]" data-end="7728" data-start="3276">
+<thead data-end="3537" data-start="3276">
+<tr data-end="3537" data-start="3276">
+<th data-end="3305" data-start="3276"><strong data-end="3288" data-start="3278">Aspect</strong></th>
+<th data-end="3362" data-start="3305"><strong data-end="3321" data-start="3307">Q-Learning</strong></th>
+<th data-end="3419" data-start="3362"><strong data-end="3373" data-start="3364">SARSA</strong></th>
+<th data-end="3477" data-start="3419"><strong data-end="3445" data-start="3421">Deep Q-Network (DQN)</strong></th>
+<th data-end="3537" data-start="3477"><strong data-end="3506" data-start="3479">Policy Gradient Methods</strong></th>
+</tr>
+</thead>
+<tbody data-end="7728" data-start="3805">
+<tr data-end="4075" data-start="3805">
+<td><strong data-end="3824" data-start="3807">Learning Type</strong></td>
+<td>Off-Policy</td>
+<td>On-Policy</td>
+<td>Off-Policy</td>
+<td>On-Policy</td>
+</tr>
+<tr data-end="4346" data-start="4076">
+<td><strong data-end="4090" data-start="4078">Approach</strong></td>
+<td>Value-Based</td>
+<td>Value-Based</td>
+<td>Value-Based (Deep Learning)</td>
+<td>Policy-Based</td>
+</tr>
+<tr data-end="4620" data-start="4347">
+<td><strong data-end="4362" data-start="4349">Objective</strong></td>
+<td>Learn optimal action-value function <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex" data-d2l-attr-encoding="application/x-tex">Q^*</annotation></semantics></math><span aria-hidden="true">Q∗</span></td>
+<td>Learn Q-values under current policy</td>
+<td>Approximate Q-values using neural networks</td>
+<td>Directly optimize policy function</td>
+</tr>
+<tr data-end="4896" data-start="4621">
+<td><strong data-end="4638" data-start="4623">Update Rule</strong></td>
+<td>Uses <strong data-end="4676" data-start="4657">maximum Q-value</strong> for next state</td>
+<td>Uses <strong data-end="4745" data-start="4717">Q-value of chosen action</strong></td>
+<td>Uses <strong data-end="4807" data-start="4777">Deep Neural Networks (DNN)</strong></td>
+<td>Uses <strong data-end="4876" data-start="4838">gradient ascent on expected return</strong></td>
+</tr>
+<tr data-end="5226" data-start="4897">
+<td><strong data-end="4911" data-start="4899">Equation</strong></td>
+<td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>←</mo><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>+</mo><mi>α</mi><mo stretchy="false">[</mo><mi>r</mi><mo>+</mo><mi>γ</mi><msub><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>a</mi></msub><mi>Q</mi><mo stretchy="false">(</mo><msup><mi>s</mi><mo rspace="0em" lspace="0em" mathvariant="normal">′</mo></msup><mo separator="true">,</mo><msup><mi>a</mi><mo rspace="0em" lspace="0em" mathvariant="normal">′</mo></msup><mo stretchy="false">)</mo><mo>−</mo><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex" data-d2l-attr-encoding="application/x-tex">Q(s, a) \leftarrow Q(s, a) + \alpha [r + \gamma \max_a Q(s', a') - Q(s, a)]</annotation></semantics></math><span aria-hidden="true"></span></td>
+<td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>←</mo><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>+</mo><mi>α</mi><mo stretchy="false">[</mo><mi>r</mi><mo>+</mo><mi>γ</mi><mi>Q</mi><mo stretchy="false">(</mo><msup><mi>s</mi><mo rspace="0em" lspace="0em" mathvariant="normal">′</mo></msup><mo separator="true">,</mo><msup><mi>a</mi><mo rspace="0em" lspace="0em" mathvariant="normal">′</mo></msup><mo stretchy="false">)</mo><mo>−</mo><mi>Q</mi><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex" data-d2l-attr-encoding="application/x-tex">Q(s, a) \leftarrow Q(s, a) + \alpha [r + \gamma Q(s', a') - Q(s, a)]</annotation></semantics></math><span aria-hidden="true"></span></td>
+<td>Uses DNN to approximate Q-values</td>
+<td>[\nabla J(\theta) = \mathbb{E}[\nabla_\theta \log \pi_\theta(a</td>
+</tr>
+<tr data-end="5502" data-start="5227">
+<td><strong data-end="5253" data-start="5229">Exploration Strategy</strong></td>
+<td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex" data-d2l-attr-encoding="application/x-tex">\epsilon</annotation></semantics></math><span aria-hidden="true"></span>-greedy</td>
+<td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex" data-d2l-attr-encoding="application/x-tex">\epsilon</annotation></semantics></math><span aria-hidden="true"></span>-greedy</td>
+<td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex" data-d2l-attr-encoding="application/x-tex">\epsilon</annotation></semantics></math><span aria-hidden="true">ϵ</span>-greedy with <strong data-end="5424" data-start="5403">experience replay</strong></td>
+<td>Stochastic policies or <strong data-end="5474" data-start="5463">softmax</strong></td>
+</tr>
+<tr data-end="5777" data-start="5503">
+<td><strong data-end="5531" data-start="5505">Function Approximation</strong></td>
+<td><strong data-end="5542" data-start="5534">None</strong> (Q-table)</td>
+<td><strong data-end="5602" data-start="5594">None</strong> (Q-table)</td>
+<td><strong data-end="5672" data-start="5654">Neural Network</strong></td>
+<td><strong data-end="5733" data-start="5715">Neural Network</strong></td>
+</tr>
+<tr data-end="6054" data-start="5778">
+<td><strong data-end="5799" data-start="5780">Data Efficiency</strong></td>
+<td><strong data-end="5816" data-start="5809">Low</strong></td>
+<td><strong data-end="5876" data-start="5869">Low</strong></td>
+<td><strong data-end="5937" data-start="5929">High</strong> (due to experience replay)</td>
+<td><strong data-end="6001" data-start="5991">Medium</strong> (can vary based on method)</td>
+</tr>
+<tr data-end="6333" data-start="6055">
+<td><strong data-end="6082" data-start="6057">Convergence Guarantee</strong></td>
+<td><strong data-end="6093" data-start="6086">Yes</strong> (if all states are visited sufficiently)</td>
+<td><strong data-end="6153" data-start="6146">Yes</strong> (to the policy being followed)</td>
+<td><strong data-end="6223" data-start="6207">No guarantee</strong> (prone to instability)</td>
+<td><strong data-end="6285" data-start="6269">No guarantee</strong> (prone to local optima)</td>
+</tr>
+<tr data-end="6612" data-start="6334">
+<td><strong data-end="6357" data-start="6336">Sample Complexity</strong></td>
+<td><strong data-end="6373" data-start="6365">High</strong></td>
+<td><strong data-end="6434" data-start="6426">High</strong></td>
+<td><strong data-end="6496" data-start="6487">Lower</strong> with experience replay</td>
+<td><strong data-end="6557" data-start="6549">High</strong> (especially for policy gradient)</td>
+</tr>
+<tr data-end="6890" data-start="6613">
+<td><strong data-end="6628" data-start="6615">Stability</strong></td>
+<td><strong data-end="6677" data-start="6644">Stable for small state spaces</strong></td>
+<td><strong data-end="6737" data-start="6704">Stable for small state spaces</strong></td>
+<td><strong data-end="6807" data-start="6764">Unstable without stabilizing techniques</strong></td>
+<td><strong data-end="6843" data-start="6826">High variance</strong> in policy gradients</td>
+</tr>
+<tr data-end="7169" data-start="6891">
+<td><strong data-end="6909" data-start="6893">Memory Usage</strong></td>
+<td><strong data-end="6930" data-start="6922">High</strong> (Q-table size:</td>
+<td>S</td>
+<td>x</td>
+<td>A</td>
+</tr>
+<tr data-end="7449" data-start="7170">
+<td><strong data-end="7186" data-start="7172">Optimality</strong></td>
+<td>Learns optimal policy regardless of exploration</td>
+<td>Learns the value of the current policy</td>
+<td>Learns optimal policy through function approximation</td>
+<td>Learns <strong data-end="7420" data-start="7393">optimal policy directly</strong></td>
+</tr>
+<tr data-end="7728" data-start="7450">
+<td><strong data-end="7479" data-start="7452">Application Suitability</strong></td>
+<td><strong data-end="7514" data-start="7481">Games, Discrete Action Spaces</strong></td>
+<td><strong data-end="7566" data-start="7542">Safe Online Learning</strong></td>
+<td><strong data-end="7656" data-start="7601">Complex, high-dimensional tasks (e.g., Atari games)</strong></td>
+<td><strong data-end="7717" data-start="7664">Robotics, Continuous Control, Real-time Decisions</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr data-end="7733" data-start="7730">
+<h3 data-end="7755" data-start="7735">🌟 <strong data-end="7755" data-start="7742">Takeaways</strong></h3>
+<ul data-end="8118" data-start="7756">
+<li data-end="7865" data-start="7756"><strong data-end="7772" data-start="7758">Q-Learning</strong>: Best for discrete action spaces and environments where exploration can be done extensively.</li>
+<li data-end="7943" data-start="7866"><strong data-end="7877" data-start="7868">SARSA</strong>: Safer for <strong data-end="7908" data-start="7889">online learning</strong>, as it follows the current policy.</li>
+<li data-end="8022" data-start="7944"><strong data-end="7953" data-start="7946">DQN</strong>: Scales Q-Learning to high-dimensional problems using deep networks.</li>
+<li data-end="8118" data-start="8023"><strong data-end="8052" data-start="8025">Policy Gradient Methods</strong>: Ideal for <strong data-end="8092" data-start="8064">continuous action spaces</strong> and fine-tuning policies.</li>
+</ul>
+<h3><strong>Video Resource:</strong></h3>
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/0iqz4tcKN58?si=FreeOwqc_Jj8GOVw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="allowfullscreen"></iframe></p></body></html>

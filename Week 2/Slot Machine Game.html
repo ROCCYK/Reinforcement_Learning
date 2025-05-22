@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slot Machine Team Game</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    .team-container {
+      margin-bottom: 20px;
+    }
+    .slot-container {
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .slot-button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      color: white;
+    }
+    .slot-button:hover {
+      opacity: 0.9;
+    }
+    #stats {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    #results {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #2c3e50;
+    }
+    canvas {
+      max-width: 600px;
+      margin: 30px auto;
+    }
+    .slot1 { background-color: #ff5733; } /* Red */
+    .slot2 { background-color: #33b5e5; } /* Blue */
+    .slot3 { background-color: #33cc33; } /* Green */
+    .slot4 { background-color: #f1c40f; } /* Yellow */
+  </style>
+</head><body><h1>Slot Machine Team Game</h1>
+<p>Take turns as a team to play the slot machines. Your team has a total of 30 plays. Maximize your rewards in dollars!</p>
+<div class="team-container"><label for="teamName">Enter Team Name:</label> <input type="text" id="teamName" placeholder="Team Name"> <button onclick="startGame()">Start Game</button> <button disabled="disabled" id="restartButton" onclick="restartGame()">Restart Game</button></div>
+<div class="slot-container"><button class="slot-button slot1" id="slot0" disabled="disabled" onclick="playSlot(0)">Slot Machine 1</button> <button class="slot-button slot2" id="slot1" disabled="disabled" onclick="playSlot(1)">Slot Machine 2</button> <button class="slot-button slot3" id="slot2" disabled="disabled" onclick="playSlot(2)">Slot Machine 3</button> <button class="slot-button slot4" id="slot3" disabled="disabled" onclick="playSlot(3)">Slot Machine 4</button></div>
+<div id="stats">Total Plays Remaining: 30 | Total Rewards: $0</div>
+<div id="results"></div>
+<p><canvas id="rewardChart"></canvas> <script>
+  // Reward probabilities for each slot machine
+  const probabilities = [0.1, 0.3, 0.6, 0.9]; // Probabilities of winning for each slot machine
+  const rewards = [0, 0, 0, 0]; // Total rewards in dollars for each slot machine
+  const plays = [0, 0, 0, 0]; // Total plays for each slot machine
+  let totalRewards = 0;
+  let totalPlays = 30;
+  let currentTeam = '';
+
+  // Start the game
+  function startGame() {
+    const teamNameInput = document.getElementById('teamName');
+    if (!teamNameInput.value) {
+      alert('Please enter a team name to start.');
+      return;
+    }
+
+    currentTeam = teamNameInput.value;
+    document.querySelectorAll('.slot-button').forEach(button => button.disabled = false);
+    teamNameInput.disabled = true;
+    document.querySelector('button[onclick="startGame()"]').disabled = true;
+    document.getElementById('restartButton').disabled = false;
+    updateStats();
+  }
+
+  // Play a slot machine
+  function playSlot(slotIndex) {
+    if (totalPlays <= 0) {
+      alert('Game Over! No more plays left.');
+      return;
+    }
+
+    // Generate a random number and decide reward
+    const randomNumber = Math.random();
+    const reward = randomNumber < probabilities[slotIndex] ? Math.floor(Math.random() * 10) + 1 : 0; // Random reward between $1 and $10
+
+    // Update stats
+    rewards[slotIndex] += reward;
+    plays[slotIndex] += 1;
+    totalRewards += reward;
+    totalPlays -= 1;
+
+    // End game logic
+    if (totalPlays === 0) {
+      document.querySelectorAll('.slot-button').forEach(button => button.disabled = true);
+      analyzeResults();
+    }
+
+    // Update UI
+    updateStats();
+    updateChart();
+  }
+
+  // Analyze results and display summary
+  function analyzeResults() {
+    const sortedResults = rewards
+      .map((reward, index) => ({ slot: `Slot Machine ${index + 1}`, reward }))
+      .sort((a, b) => b.reward - a.reward);
+
+    const analysis = sortedResults.map(
+      (result, index) => `${index + 1}. ${result.slot}: $${result.reward}`
+    ).join('<br>');
+
+    document.getElementById('results').innerHTML = `
+      <h3>Game Over! Team "${currentTeam}" Results:</h3>
+      <p>Total Rewards: $${totalRewards}</p>
+      <p>Most to Least Rewarding Machines:</p>
+      <p>${analysis}</p>
+      <p><b>Strategy Reflection:</b> Did the team focus on exploring all machines or exploiting the most rewarding ones early? Discuss how your choices impacted the total rewards.</p>
+    `;
+  }
+
+  // Restart the game
+  function restartGame() {
+    // Reset variables
+    rewards.fill(0);
+    plays.fill(0);
+    totalRewards = 0;
+    totalPlays = 30;
+    currentTeam = '';
+
+    // Reset UI
+    document.getElementById('teamName').value = '';
+    document.getElementById('teamName').disabled = false;
+    document.querySelector('button[onclick="startGame()"]').disabled = false;
+    document.getElementById('restartButton').disabled = true;
+    document.querySelectorAll('.slot-button').forEach(button => button.disabled = true);
+    document.getElementById('results').innerHTML = '';
+    updateStats();
+    updateChart();
+  }
+
+  // Update stats on the page
+  function updateStats() {
+    document.getElementById('stats').innerText = `Total Plays Remaining: ${totalPlays} | Total Rewards: $${totalRewards}`;
+  }
+
+  // Initialize Chart.js bar chart
+  const ctx = document.getElementById('rewardChart').getContext('2d');
+  const rewardChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Slot Machine 1', 'Slot Machine 2', 'Slot Machine 3', 'Slot Machine 4'],
+      datasets: [
+        {
+          label: 'Total Rewards ($)',
+          data: rewards,
+          backgroundColor: ['#ff5733', '#33b5e5', '#33cc33', '#f1c40f']
+        },
+        {
+          label: 'Total Plays',
+          data: plays,
+          backgroundColor: '#95a5a6'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // Update chart data
+  function updateChart() {
+    rewardChart.data.datasets[0].data = rewards;
+    rewardChart.data.datasets[1].data = plays;
+    rewardChart.update();
+  }
+</script></p></body></html>

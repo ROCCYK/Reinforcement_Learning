@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html><head>
+    <title>MDP Interactive MCQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .feedback {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+    </style>
+</head><body><h2>Markov Decision Process (MDP) Interactive MCQ</h2>
+<p>Answer the following multiple-choice questions. Click on an option to see immediate feedback.</p>
+<div id="quiz">
+<div class="question" id="q1">
+<p>1. What is a Markov Decision Process (MDP)?</p>
+<button onclick="checkAnswer(1, 'correct')">A framework for modeling decision-making problems with uncertainty</button> <button onclick="checkAnswer(1, 'incorrect')">A type of supervised learning algorithm</button>
+<p class="feedback" id="feedback1"></p>
+</div>
+<div class="question" id="q2">
+<p>2. Which are the key components of an MDP?</p>
+<button onclick="checkAnswer(2, 'correct')">States, Actions, Transition Probabilities, Rewards</button> <button onclick="checkAnswer(2, 'incorrect')">Loss Functions, Neurons, and Weights</button>
+<p class="feedback" id="feedback2"></p>
+</div>
+<div class="question" id="q3">
+<p>3. How does an MDP differ from a simple Markov Chain?</p>
+<button onclick="checkAnswer(3, 'correct')">An MDP includes actions and rewards</button> <button onclick="checkAnswer(3, 'incorrect')">A Markov Chain includes actions, but an MDP does not</button>
+<p class="feedback" id="feedback3"></p>
+</div>
+<div class="question" id="q4">
+<p>4. What is the role of states in an MDP?</p>
+<button onclick="checkAnswer(4, 'correct')">They define possible situations an agent can be in</button> <button onclick="checkAnswer(4, 'incorrect')">They determine the exact reward an agent will receive</button>
+<p class="feedback" id="feedback4"></p>
+</div>
+<div class="question" id="q5">
+<p>5. What does the state transition probability in an MDP represent?</p>
+<button onclick="checkAnswer(5, 'correct')">The likelihood of moving from one state to another given an action</button> <button onclick="checkAnswer(5, 'incorrect')">The expected reward of an action</button>
+<p class="feedback" id="feedback5"></p>
+</div>
+<div class="question" id="q6">
+<p>6. In a self-driving car system, what could be an example of a state?</p>
+<button onclick="checkAnswer(6, 'correct')">The car's current location and speed</button> <button onclick="checkAnswer(6, 'incorrect')">The amount of fuel in the gas station</button>
+<p class="feedback" id="feedback6"></p>
+</div>
+<div class="question" id="q7">
+<p>7. In a game of chess modeled as an MDP, what could be an action?</p>
+<button onclick="checkAnswer(7, 'correct')">Moving a piece</button> <button onclick="checkAnswer(7, 'incorrect')">Observing the opponent</button>
+<p class="feedback" id="feedback7"></p>
+</div>
+<div class="question" id="q8">
+<p>8. What is an example of a transition probability in an MDP?</p>
+<button onclick="checkAnswer(8, 'correct')">The probability of a self-driving car moving from one lane to another after turning</button> <button onclick="checkAnswer(8, 'incorrect')">The number of passengers in a taxi</button>
+<p class="feedback" id="feedback8"></p>
+</div>
+<div class="question" id="q9">
+<p>9. What happens when an MDP does not have an optimal policy?</p>
+<button onclick="checkAnswer(9, 'correct')">The agent may not find the best strategy to maximize long-term rewards</button> <button onclick="checkAnswer(9, 'incorrect')">The MDP becomes a supervised learning problem</button>
+<p class="feedback" id="feedback9"></p>
+</div>
+<div class="question" id="q10">
+<p>10. What is an example of an MDP application?</p>
+<button onclick="checkAnswer(10, 'correct')">Robot navigation in an unknown environment</button> <button onclick="checkAnswer(10, 'incorrect')">Sorting a list of numbers</button>
+<p class="feedback" id="feedback10"></p>
+</div>
+</div>
+<p><script>
+        function checkAnswer(question, correctness) {
+            let feedback = document.getElementById(`feedback${question}`);
+            if (correctness === 'correct') {
+                feedback.textContent = "Correct!";
+                feedback.style.color = "green";
+            } else {
+                feedback.textContent = "Incorrect. Try again.";
+                feedback.style.color = "red";
+            }
+        }
+    </script></p></body></html>

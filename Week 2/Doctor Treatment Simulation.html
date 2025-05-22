@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Treatment Simulation</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .doctor-button {
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+    .doctor1 { background-color: #3498db; }
+    .doctor2 { background-color: #e74c3c; }
+    .doctor3 { background-color: #2ecc71; }
+    #results {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    #question {
+      margin-top: 30px;
+      font-size: 18px;
+    }
+    canvas {
+      max-width: 600px;
+      margin: 20px auto;
+    }
+  </style>
+</head><body><h1>Doctor Treatment Simulation</h1>
+<p>Select a doctor to treat a patient. Each doctor has a different success rate!</p>
+<div class="button-container"><button class="doctor-button doctor1" onclick="treatPatient(0)">Doctor 1</button> <button class="doctor-button doctor2" onclick="treatPatient(1)">Doctor 2</button> <button class="doctor-button doctor3" onclick="treatPatient(2)">Doctor 3</button></div>
+<div id="results">
+<p>Total Patients Treated: <span id="total-treatments">0</span></p>
+<p>Successful Treatments: <span id="total-success">0</span></p>
+</div>
+<p><canvas id="chart"></canvas></p>
+<div id="question">
+<p>Based on the data, which doctor would you choose for your next treatment?</p>
+<button onclick="provideFeedback(0)">Choose Doctor 1</button> <button onclick="provideFeedback(1)">Choose Doctor 2</button> <button onclick="provideFeedback(2)">Choose Doctor 3</button>
+<p id="feedback"></p>
+</div>
+<p><script>
+    const successRates = [0.3, 0.6, 0.9]; // Success probabilities for each doctor
+    const treatmentCounts = [0, 0, 0]; // Number of patients treated by each doctor
+    const successCounts = [0, 0, 0]; // Number of successful treatments by each doctor
+
+    let totalTreatments = 0;
+    let totalSuccess = 0;
+
+    const ctx = document.getElementById('chart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Doctor 1', 'Doctor 2', 'Doctor 3'],
+        datasets: [
+          {
+            label: 'Treatments',
+            data: treatmentCounts,
+            backgroundColor: ['#3498db', '#e74c3c', '#2ecc71'],
+          },
+          {
+            label: 'Successful Treatments',
+            data: successCounts,
+            backgroundColor: ['#85c1e9', '#f1948a', '#a9dfbf'],
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    function treatPatient(doctorIndex) {
+      totalTreatments++;
+      treatmentCounts[doctorIndex]++;
+
+      if (Math.random() < successRates[doctorIndex]) {
+        totalSuccess++;
+        successCounts[doctorIndex]++;
+      }
+
+      document.getElementById('total-treatments').innerText = totalTreatments;
+      document.getElementById('total-success').innerText = totalSuccess;
+
+      updateChart();
+    }
+
+    function updateChart() {
+      chart.data.datasets[0].data = treatmentCounts;
+      chart.data.datasets[1].data = successCounts;
+      chart.update();
+    }
+
+    function provideFeedback(doctorIndex) {
+      const feedbackElement = document.getElementById('feedback');
+      const chosenSuccessRate = successRates[doctorIndex];
+      feedbackElement.innerText = `You chose Doctor ${doctorIndex + 1} with a success rate of ${(chosenSuccessRate * 100).toFixed(1)}%. This is ${chosenSuccessRate === Math.max(...successRates) ? 'the best choice!' : 'not the optimal choice. Consider a doctor with a higher success rate.'}`;
+    }
+  </script></p></body></html>

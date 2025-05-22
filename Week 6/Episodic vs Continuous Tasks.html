@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episodic vs Continuous Tasks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a4a4a;
+        }
+
+        .instructions {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .match-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .match-group {
+            width: 45%;
+        }
+
+        .match-group h2 {
+            text-align: center;
+            color: #8e44ad;
+        }
+
+        .match-pair {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            color: green;
+        }
+
+        .feedback.incorrect {
+            color: red;
+        }
+    </style>
+</head><body><div class="container">
+<h1>Episodic vs Continuous Tasks</h1>
+<p class="instructions">Match the tasks with the correct category. Click "Submit" to check your answers.</p>
+<div class="match-container">
+<div class="match-group">
+<h2>Tasks</h2>
+<div class="match-pair">Modulating traffic signal timings based on real-time traffic flow<select id="task6">
+<option value="">--Select--</option>
+<option value="episodic">Episodic</option>
+<option value="continuous">Continuous</option>
+</select></div>
+<div class="match-pair">Solving a puzzle<select id="task1">
+<option value="">--Select--</option>
+<option value="episodic">Episodic</option>
+<option value="continuous">Continuous</option>
+</select></div>
+<div class="match-pair">Optimizing smart grid energy consumption<select id="task4">
+<option value="">--Select--</option>
+<option value="episodic">Episodic</option>
+<option value="continuous">Continuous</option>
+</select></div>
+<div class="match-pair">Playing a soccer match<select id="task3">
+<option value="">--Select--</option>
+<option value="episodic">Episodic</option>
+<option value="continuous">Continuous</option>
+</select></div>
+<div class="match-pair">Playing a game of chess<select id="task2">
+<option value="">--Select--</option>
+<option value="episodic">Episodic</option>
+<option value="continuous">Continuous</option>
+</select></div>
+<div class="match-pair">Monitoring stock market data to make buy or sell decisions<select id="task5">
+<option value="">--Select--</option>
+<option value="episodic">Episodic</option>
+<option value="continuous">Continuous</option>
+</select></div>
+</div>
+</div>
+<button onclick="checkAnswers()">Submit</button>
+<div id="feedback" class="feedback"></div>
+<div class="overview">
+<h2>What Are Episodic and Continuous Tasks?</h2>
+<p>Episodic tasks are discrete activities with a clear beginning and end, such as solving a puzzle or playing a game of chess. These tasks are relevant in Markov Decision Processes (MDPs) because they can be modeled as finite episodes, allowing for policy optimization and decision-making within a well-defined scope.</p>
+<p>Continuous tasks, on the other hand, are ongoing activities without a clear end, such as optimizing traffic signal timings or monitoring stock market data. These tasks are modeled in MDPs as infinite horizon problems, requiring policies that balance long-term and short-term objectives effectively.</p>
+</div>
+</div>
+<p><script>
+        function checkAnswers() {
+            const answers = {
+                task1: "episodic",
+                task2: "episodic",
+                task3: "episodic",
+                task4: "continuous",
+                task5: "continuous",
+                task6: "continuous"
+            };
+
+            let correct = true;
+
+            for (const [key, value] of Object.entries(answers)) {
+                const userAnswer = document.getElementById(key).value;
+                if (userAnswer !== value) {
+                    correct = false;
+                    break;
+                }
+            }
+
+            const feedback = document.getElementById('feedback');
+            if (correct) {
+                feedback.textContent = "Correct! Great job classifying the tasks.";
+                feedback.className = "feedback correct";
+            } else {
+                feedback.textContent = "Incorrect. Please review the task definitions and try again.";
+                feedback.className = "feedback incorrect";
+            }
+        }
+    </script></p></body></html>

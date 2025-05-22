@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="utf-8">
+  <title>Iterative Policy Evaluation Demo &amp; Explanation</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      line-height: 1.5;
+      max-width: 800px;
+    }
+    pre {
+      background: #f8f8f8;
+      padding: 8px;
+      border-radius: 5px;
+    }
+    code {
+      background: #f0f0f0;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    h1, h2, h3 {
+      margin-top: 1.2em;
+    }
+    table, th, td {
+      border: 1px solid gray;
+      border-collapse: collapse;
+      padding: 5px;
+      text-align: right;
+    }
+    table th {
+      background-color: #efefef;
+    }
+    button {
+      margin: 5px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+    .highlight {
+      background: #fff3cd;
+      padding: 6px;
+      border: 1px dashed #ffa;
+    }
+  </style>
+</head><body><h1>Iterative Policy Evaluation (Two-State MDP)</h1>
+<p>This page demonstrates <strong>iterative policy evaluation</strong> for a simple two-state Markov Decision Process (MDP). The MDP has the following characteristics:</p>
+<ul>
+<li><strong>States:</strong> S<sub>1</sub> and S<sub>2</sub></li>
+<li><strong>Actions / Policy:</strong> We have a fixed policy π:
+<ul>
+<li>In S<sub>1</sub>, the policy takes action a<sub>1</sub>, leading to reward = 0, next state = S<sub>2</sub>.</li>
+<li>In S<sub>2</sub>, the policy takes action a<sub>2</sub>, leading to reward = 1, next state = S<sub>1</sub>.</li>
+</ul>
+</li>
+<li><strong>Discount factor:</strong> γ = 0.9</li>
+</ul>
+<hr>
+<h2>Theory &amp; Step-by-Step Explanation</h2>
+<h3>1. The MDP and the Policy</h3>
+<p>We have two states, <code>S_1</code> and <code>S_2</code>. Under our policy π, from <code>S_1</code> we get reward 0 and transition to <code>S_2</code>. From <code>S_2</code>, we get reward 1 and transition to <code>S_1</code>. We keep discount factor <code>γ = 0.9</code>.</p>
+<p>Concretely:</p>
+<ul>
+<li><code>S_1 --(reward=0)--&gt; S_2</code></li>
+<li><code>S_2 --(reward=1)--&gt; S_1</code></li>
+</ul>
+<p></p>
+<h3>2. The Bellman Equation for a Fixed Policy</h3>
+<p>In general, the <em>policy evaluation</em> Bellman equation states:</p>
+<pre>v<sub>π</sub>(s) = Σ<sub>a</sub>π(a|s) Σ<sub>s', r</sub> p(s',r | s,a) [ r + γ v<sub>π</sub>(s') ]
+</pre>
+<p>In our two-state case, the policy is deterministic, so:</p>
+<pre>v<sub>π</sub>(S<sub>1</sub>) = 0 + 0.9 * v<sub>π</sub>(S<sub>2</sub>)
+v<sub>π</sub>(S<sub>2</sub>) = 1 + 0.9 * v<sub>π</sub>(S<sub>1</sub>)
+</pre>
+<h3>3. Iterative Policy Evaluation</h3>
+<p><strong>Iterative policy evaluation</strong> starts with an initial guess, say <code>v<sub>0</sub>(S<sub>1</sub>) = 0</code> and <code>v<sub>0</sub>(S<sub>2</sub>) = 0</code>, and then applies the update rule <em>synchronously</em>:</p>
+<pre>v<sub>k+1</sub>(S<sub>1</sub>) = 0.9 * v<sub>k</sub>(S<sub>2</sub>)
+v<sub>k+1</sub>(S<sub>2</sub>) = 1 + 0.9 * v<sub>k</sub>(S<sub>1</sub>)
+</pre>
+<p>Each iteration uses the values from iteration k to compute iteration k+1.</p>
+<div class="highlight"><strong>Key idea:</strong> Over many iterations, <code>v<sub>k</sub>(s)</code> converges to the true value function <code>v<sub>π</sub>(s)</code>. This is guaranteed by the fact that the Bellman operator is a γ-contraction in the max norm (Banach fixed-point theorem).</div>
+<h3>4. Example of the First Few Updates</h3>
+<table>
+<thead>
+<tr>
+<th>Iteration k</th>
+<th>v<sub>k</sub>(S<sub>1</sub>)</th>
+<th>v<sub>k</sub>(S<sub>2</sub>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0.0000</td>
+<td>0.0000</td>
+</tr>
+<tr>
+<td>1</td>
+<td>v<sub>1</sub>(S<sub>1</sub>) = 0.9 * 0.0 = 0.0</td>
+<td>v<sub>1</sub>(S<sub>2</sub>) = 1 + 0.9*0.0 = 1.0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.9 * 1.0 = 0.9</td>
+<td>1 + 0.9*0.0 = 1.0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.9 * 1.0 = 0.9</td>
+<td>1 + 0.9*0.9 = 1.81</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.9 * 1.81 = 1.629</td>
+<td>1 + 0.9*0.9 = 1.81</td>
+</tr>
+<!-- And so on... --></tbody>
+</table>
+<p>Eventually, these values converge toward the exact solution:</p>
+<pre>v<sub>π</sub>(S<sub>1</sub>) ≈ 4.7368
+v<sub>π</sub>(S<sub>2</sub>) ≈ 5.2632
+</pre>
+<hr>
+<h2>Live Demo</h2>
+<p>Below is a JavaScript demo that starts with <code>v<sub>0</sub>(S<sub>1</sub>) = 0</code> and <code>v<sub>0</sub>(S<sub>2</sub>) = 0</code>. You can:</p>
+<ul>
+<li>Click <strong>Step</strong> to do one iteration.</li>
+<li>Click <strong>Run</strong> to perform about 20 steps automatically.</li>
+<li>Click <strong>Reset</strong> to set everything back to iteration 0.</li>
+</ul>
+<p>Watch how <code>v(S<sub>1</sub>)</code> and <code>v(S<sub>2</sub>)</code> gradually approach their true values.</p>
+<table id="iterationTable">
+<thead>
+<tr>
+<th>Iteration</th>
+<th>v(S<sub>1</sub>)</th>
+<th>v(S<sub>2</sub>)</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p><button onclick="stepOnce()">Step</button> <button onclick="run()">Run</button> <button onclick="reset()">Reset</button> <script>
+  // Discount factor
+  const gamma = 0.9;
+
+  // We'll track the current iteration, plus the value estimates.
+  let iteration = 0;
+  let vS1 = 0.0;
+  let vS2 = 0.0;
+
+  // Table <tbody> where we add rows:
+  const tableBody = document.getElementById('iterationTable').querySelector('tbody');
+
+  // Add a row to the table reflecting the current iteration and values
+  function addRow() {
+    const row = document.createElement('tr');
+    const colIter = document.createElement('td');
+    const colVS1 = document.createElement('td');
+    const colVS2 = document.createElement('td');
+
+    colIter.textContent = iteration;
+    colVS1.textContent = vS1.toFixed(4);
+    colVS2.textContent = vS2.toFixed(4);
+
+    row.appendChild(colIter);
+    row.appendChild(colVS1);
+    row.appendChild(colVS2);
+    tableBody.appendChild(row);
+  }
+
+  // Perform one iteration of synchronous backup
+  function stepOnce() {
+    // old values from iteration k
+    const oldVS1 = vS1;
+    const oldVS2 = vS2;
+
+    // new iteration k+1
+    const newVS1 = gamma * oldVS2;       // 0 + gamma * v_k(S2)
+    const newVS2 = 1 + gamma * oldVS1;   // 1 + gamma * v_k(S1)
+
+    // update
+    vS1 = newVS1;
+    vS2 = newVS2;
+    iteration++;
+    addRow();
+  }
+
+  // Run automatically for ~20 iterations
+  let running = false;
+  function run() {
+    if (!running) {
+      running = true;
+      runLoop();
+    }
+  }
+  function runLoop() {
+    if (!running) return;
+    stepOnce();
+    if (iteration < 20) {
+      setTimeout(runLoop, 300); // 300 ms delay
+    } else {
+      running = false;
+    }
+  }
+
+  // Reset everything
+  function reset() {
+    iteration = 0;
+    vS1 = 0.0;
+    vS2 = 0.0;
+    running = false;
+    tableBody.innerHTML = "";
+    addRow(); // iteration 0 row
+  }
+
+  // Initialize with iteration = 0 row
+  reset();
+</script></p></body></html>
